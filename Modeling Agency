@@ -1,0 +1,118 @@
+using System;
+using System.IO;
+
+
+namespace Assign4
+{
+    class Models
+    {
+        static void Main(string[] args)
+        {
+            //input line
+            string strInputLine = "";
+
+            //inputs
+            string strName = "";
+            int intWeight = 0;
+            int intHeight = 0;
+            char chaEye;
+            char chaHair;
+            char chaGender;
+            int intModels = 0;
+
+            //work fields
+            double AvgWeight = 0;
+            double AvgHeight = 0;
+            int intTotalHeight = 0;
+            int intTotalWeight = 0;
+            string strEye = "";
+            string strHair = "";
+            int intBrownEyes = 0;
+            int intMales = 0;
+            string strInputPath = "ModelsInput2.txt";
+            string strOutputPath = "Models.txt";
+            using (StreamReader sr = new StreamReader(strInputPath))
+            using (StreamWriter sw = new StreamWriter(strOutputPath))
+            {
+                //heading
+                sw.WriteLine("MODEL REPORT");
+                sw.WriteLine();
+                sw.WriteLine("NAME                   GENDER    WEIGHT    HEIGHT   EYE COLOR   HAIR COLOR");
+
+                //process store file
+                while ((strInputLine = sr.ReadLine()) != null)
+                {
+
+                    //parse the input line
+                    strName = strInputLine.Substring(0, 24);
+                    intWeight = Convert.ToInt16(strInputLine.Substring(24, 8));
+                    intHeight = Convert.ToInt16(strInputLine.Substring(32, 8));
+                    chaEye = Convert.ToChar(strInputLine.Substring(40, 1));
+                    chaHair = Convert.ToChar(strInputLine.Substring(48, 1));
+                    chaGender = Convert.ToChar(strInputLine.Substring(56, 1));
+                    
+                    //male model counter
+                    if (Convert.ToString(chaGender) == "M")
+                        intMales = intMales + 1;
+
+                    //brown eye counter
+                    if (Convert.ToString(chaEye) == "2")
+                        intBrownEyes = intBrownEyes + 1;
+
+                    intModels = intModels + 1;
+                    intTotalWeight = intTotalWeight + intWeight;
+                    intTotalHeight = intTotalHeight + intHeight;
+
+                    //for selected models
+
+                    if (((chaGender.ToString() == "F") && (chaEye.ToString() == "2") && (chaHair.ToString() == "2") && (intHeight > 62 && intHeight < 68)
+                        && (intWeight >= 110 && intWeight <= 125)) ||
+                        //sw.WriteLine("Criteria 2 met ");
+
+                    ((chaGender.ToString() == "M") && (chaEye.ToString() == "1") && (chaHair.ToString() == "1") &&
+                        (intHeight > 72) && (intWeight >= 185) && (intWeight <= 200)))
+                        //sw.WriteLine("Criteria 1 met");
+                    {
+                        switch (chaHair.ToString())
+                        {
+                            case "1":
+                                strHair = "blonde";
+                                break;
+                            case "2":
+                                strHair = "brown";
+                                break;
+                            case "3":
+                                strHair = "other";
+                                break;
+                        }
+                        switch (chaEye.ToString())
+                        {
+                            case "1":
+                                strEye = "blue";
+                                break;
+                            case "2":
+                                strEye = "brown";
+                                break;
+                            case "3":
+                                strEye = "other";
+                                break;
+                        }
+                        sw.WriteLine(strName + " " + chaGender + "       " + intWeight + "        " + intHeight + "        " + strEye + "          " + strHair);
+                    }
+                }
+                AvgWeight = intTotalWeight / intModels;
+                AvgHeight = intTotalHeight / intModels;
+                sw.WriteLine();
+                sw.WriteLine();
+                sw.WriteLine();
+                sw.WriteLine("Male Models: {0}", intMales);
+                sw.WriteLine("Brown Eyed Models: {0}", intBrownEyes);
+                sw.WriteLine("Average Height: {0}", AvgHeight);
+                sw.WriteLine("Average Weight: {0}", AvgWeight);
+
+            }
+
+        }
+
+    }
+}
